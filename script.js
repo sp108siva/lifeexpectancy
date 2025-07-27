@@ -25,7 +25,7 @@ const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
 const yAxis = d3.axisLeft(yScale);
 
 // Load data and initialize
-d3.csv('data1/life_expectancy.csv', d => ({
+d3.csv('life_expectancy.csv', d => ({
   country: d.country,
   year: +d.year,
   lifeExp: +d.life_expectancy,
