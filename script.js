@@ -25,16 +25,16 @@ const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
 const yAxis = d3.axisLeft(yScale);
 
 // Load data and initialize
-d3.csv('life_expectancy.csv', d => ({
+d3.csv('life_expectancy.xlsx', d => ({
   country: d.country,
   year: +d.year,
-  lifeExp: +d.life_expectancy,
-  region: d.region
+  lifeExp: +d.life_expectancy //,
+  //region: d.region
 })).then(raw => {
   data = raw;
   
   // build a color scale by region
-  const regions = Array.from(new Set(data.map(d => d.region)));
+  const regions = Array.from(new Set(data.map(d => d.country))); //changed to country from region
   colorScale = d3.scaleOrdinal()
                  .domain(regions)
                  .range(d3.schemeTableau10);
@@ -103,7 +103,7 @@ function renderSlide0() {
       .attr('cx', d => xScale(d.year))
       .attr('cy', d => yScale(d.lifeExp))
       .attr('r', 4)
-      .attr('fill', d => colorScale(d.region))
+      .attr('fill', d => colorScale(d.country)) //changed to country from region
       .attr('opacity', 0.8);
 
   // Annotation: high vs low cluster
@@ -151,7 +151,7 @@ function renderSlide1() {
     .join('path')
       .attr('d', d => lineGen(d))
       .attr('fill','none')
-      .attr('stroke', d => colorScale(d[0].region))
+      .attr('stroke', d => colorScale(d[0].country)) // changed to country from region
       .attr('stroke-width', 2);
 
   // Annotation
