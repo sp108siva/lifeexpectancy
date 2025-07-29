@@ -26,15 +26,15 @@ const yAxis = d3.axisLeft(yScale);
 
 // Load data and initialize
 d3.csv('life_expectancy.xlsx', d => ({
-  country: d.country,
-  year: +d.year,
+  country: d.Country,
+  year: +d.Year,
   lifeExp: +d.life_expectancy //,
   //region: d.region
 })).then(raw => {
   data = raw;
   
   // build a color scale by region
-  const regions = Array.from(new Set(data.map(d => d.country))); //changed to country from region
+  const regions = Array.from(new Set(data.map(d => d.Country))); //changed to country from region
   colorScale = d3.scaleOrdinal()
                  .domain(regions)
                  .range(d3.schemeTableau10);
@@ -95,15 +95,15 @@ function renderSlide0() {
   const layer = svg.append('g').attr('class','plot-layer');
 
   // filter 1960
-  const year0 = data.filter(d => d.year === 1960);
+  const year0 = data.filter(d => d.Year === 1960);
 
   layer.selectAll('circle')
     .data(year0)
     .enter().append('circle')
-      .attr('cx', d => xScale(d.year))
+      .attr('cx', d => xScale(d.Year))
       .attr('cy', d => yScale(d.lifeExp))
       .attr('r', 4)
-      .attr('fill', d => colorScale(d.country)) //changed to country from region
+      .attr('fill', d => colorScale(d.Country)) //changed to country from region
       .attr('opacity', 0.8);
 
   // Annotation: high vs low cluster
@@ -138,12 +138,12 @@ function renderSlide1() {
   // pick a few East Asian countries
   const focus = ['China','Japan','South Korea'];
   const filtered = data
-    .filter(d => focus.includes(d.country) && d.year <= 1990);
+    .filter(d => focus.includes(d.Country) && d.Year <= 1990);
 
   // nest by country
-  const nest = d3.group(filtered, d => d.country);
+  const nest = d3.group(filtered, d => d.Country);
   const lineGen = d3.line()
-    .x(d => xScale(d.year))
+    .x(d => xScale(d.Year))
     .y(d => yScale(d.lifeExp));
 
   layer.selectAll('path')
@@ -151,7 +151,7 @@ function renderSlide1() {
     .join('path')
       .attr('d', d => lineGen(d))
       .attr('fill','none')
-      .attr('stroke', d => colorScale(d[0].country)) // changed to country from region
+      .attr('stroke', d => colorScale(d[0].Country)) // changed to country from region
       .attr('stroke-width', 2);
 
   // Annotation
@@ -162,7 +162,7 @@ function renderSlide1() {
         label: 'China, Japan & South Korea rose ~20 yrs in three decades'
       },
       x: xScale(1990) - 10,
-      y: yScale(nest.get('China').find(d => d.year===1990).lifeExp),
+      y: yScale(nest.get('China').find(d => d.Year===1990).lifeExp),
       dx: -120,
       dy: -30
     }
@@ -180,7 +180,7 @@ function renderSlide1() {
   layer.selectAll('circle')
     .data(filtered)
     .enter().append('circle')
-      .attr('cx', d => xScale(d.year))
+      .attr('cx', d => xScale(d.Year))
       .attr('cy', d => yScale(d.lifeExp))
       .attr('r', 3)
       .attr('fill', '#555')
@@ -191,7 +191,7 @@ function renderSlide1() {
             .style('position','absolute')
             .style('left', `${e.pageX}px`)
             .style('top', `${e.pageY}px`)
-            .html(`<strong>${d.country}</strong><br/>${d.year}: ${d.lifeExp} yrs`);
+            .html(`<strong>${d.Country}</strong><br/>${d.year}: ${d.lifeExp} yrs`);
       })
       .on('mouseout', () => d3.selectAll('.tooltip').remove());
 }
